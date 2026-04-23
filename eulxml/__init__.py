@@ -34,7 +34,6 @@ if __version_info__[-1] is not None:
 #: relative path for schema data directory
 SCHEMA_DATA_DIR = 'schema_data'
 
-# use package resources if possible, so this will work from an egg
 # use package resources if possible, so this will work from an installed package
 _schema_data = importlib.resources.files(__name__).joinpath(SCHEMA_DATA_DIR)
 if _schema_data.is_dir():
