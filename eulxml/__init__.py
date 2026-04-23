@@ -15,10 +15,10 @@
 #   See the License for the specific language governing permissions and
 #   limitations under the License.
 
+import importlib.resources
 import os
-import pkg_resources
 
-__version_info__ = (1, 1, 3, None)
+__version_info__ = (1, 2, 0, None)
 
 # Dot-connect all but the last. Last is dash-connected if not None.
 __version__ = '.'.join([str(i) for i in __version_info__[:-1]])
@@ -35,13 +35,11 @@ if __version_info__[-1] is not None:
 SCHEMA_DATA_DIR = 'schema_data'
 
 # use package resources if possible, so this will work from an egg
-# http://peak.telecommunity.com/DevCenter/PythonEggs#accessing-package-resources
-if pkg_resources.resource_isdir(__name__, SCHEMA_DATA_DIR):
-    XMLCATALOG_DIR = pkg_resources.resource_filename(__name__,
-                                                     SCHEMA_DATA_DIR)
-    XMLCATALOG_FILE = pkg_resources.\
-        resource_filename(__name__,
-                          '%s/catalog.xml' % SCHEMA_DATA_DIR)
+# use package resources if possible, so this will work from an installed package
+_schema_data = importlib.resources.files(__name__).joinpath(SCHEMA_DATA_DIR)
+if _schema_data.is_dir():
+    XMLCATALOG_DIR = str(_schema_data)
+    XMLCATALOG_FILE = str(_schema_data.joinpath('catalog.xml'))
 else:
     XMLCATALOG_DIR = os.path.join(os.path.dirname(__file__),
                                   SCHEMA_DATA_DIR)
